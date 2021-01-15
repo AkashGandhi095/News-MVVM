@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/news_imgV"
+            android:layout_width="128dp"
+            android:layout_height="142dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/news_titleV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/news_imgV"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/lorem/random"
+            android:layout_margin="8dp"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:maxLines="3"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/author_textV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/news_titleV"
+            app:layout_constraintStart_toStartOf="@+id/news_titleV"
+            app:layout_constraintTop_toBottomOf="@id/news_titleV"
+            android:maxLines="1"
+            tools:text="By :Michele LeTourneau, Local Journalism Initiative Reporter"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/source_textV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/author_textV"
+            app:layout_constraintStart_toStartOf="@+id/author_textV"
+            app:layout_constraintTop_toBottomOf="@+id/author_textV"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            tools:text="Source : Vanderhoof Omineca Express"
+            android:textStyle="bold" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

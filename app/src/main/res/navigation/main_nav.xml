@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/countrySelectFragment">
+
+    <fragment
+        android:id="@+id/countrySelectFragment"
+        android:name="com.app.news_mvvm.fragments.mainfragments.CountrySelectFragment"
+        android:label="fragment_country_select"
+        tools:layout="@layout/fragment_country_select" >
+        <action
+            android:id="@+id/action_countrySelectFragment_to_sourceSelectFragment"
+            app:destination="@id/sourceSelectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sourceSelectFragment"
+        android:name="com.app.news_mvvm.fragments.mainfragments.SourceSelectFragment"
+        android:label="fragment_source_select"
+        tools:layout="@layout/fragment_source_select" >
+        <action
+            android:id="@+id/action_sourceSelectFragment_to_countrySelectFragment"
+            app:destination="@id/countrySelectFragment" />
+    </fragment>
+</navigation>
