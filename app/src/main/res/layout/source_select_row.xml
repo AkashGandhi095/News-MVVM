@@ -21,12 +21,4 @@
         android:textColor="@color/black"
         tools:ignore="RtlSymmetry" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/sort_imgV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_baseline_dehaze_24"
-        android:padding="12dp"
-        />
 </LinearLayout>
