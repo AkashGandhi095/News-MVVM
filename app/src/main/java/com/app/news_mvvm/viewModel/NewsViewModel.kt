@@ -9,6 +9,7 @@ import com.app.news_mvvm.model.Articles
 import com.app.news_mvvm.model.News
 import com.app.news_mvvm.model.SourceSelect
 import com.app.news_mvvm.repository.NewsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private const val TAG = "NewsViewModel"
@@ -19,23 +20,18 @@ class NewsViewModel(application: Application) :AndroidViewModel(application) {
         Log.d(TAG, "init NewsViewModel :${hashCode()}: ")
     }
 
-   /* private val sourceLiveList :MutableLiveData<List<SourceSelect>> = MutableLiveData()
-    private val headlinesList :MutableLiveData<List<Articles>> = MutableLiveData()
-    private val errorString :MutableLiveData<String> = MutableLiveData()
-    private val getSelectedSource :MutableLiveData<List<SourceSelect>> = MutableLiveData()*/
+
 
 
     private val sourceLiveList :MutableLiveData<List<SourceSelect>> by lazy { MutableLiveData() }
     private val newsArticleList :MutableLiveData<List<Articles>> by lazy { MutableLiveData() }
     private val sourceNewsArticlesList :MutableLiveData<List<Articles>> by lazy { MutableLiveData() }
     private val errorString :MutableLiveData<String> by lazy { MutableLiveData() }
-    private val newsUrls :MutableLiveData<String> by lazy { MutableLiveData() }
-    //private val getSelectedSource :MutableLiveData<List<SourceSelect>> by lazy { MutableLiveData() }
 
     var countryCode :String = ""
 
 
-    private fun fetchSourcesFromServer(countryCode :String) {
+   /* private fun fetchSourcesFromServer(countryCode :String) {
         NewsRepository.getRepoInstance(getApplication())
             .fetchSourcesFromApi(countryCode, object : OnSourceCallback {
                 override fun onSuccessResponse(sourceList: List<SourceSelect>) {
@@ -49,6 +45,23 @@ class NewsViewModel(application: Application) :AndroidViewModel(application) {
                 }
 
         })
+    }*/
+
+    private fun fetchSourcesFromServer(countryCode: String) {
+        viewModelScope.launch {
+            val sourceResponse = NewsRepository
+                    .getRepoInstance(getApplication())
+                    .fetchSourcesFromApi(countryCode)
+
+            if (sourceResponse.isSuccessful && sourceResponse.body() != null) {
+                sourceResponse.body()?.let {
+                    sourceLiveList.value = it.sources
+                }
+            } else {
+                errorString.value = "Something Went Wrong : ${sourceResponse.message()}"
+            }
+
+        }
     }
 
     fun getLiveSources(countryCode: String) :LiveData<List<SourceSelect>> {
@@ -59,11 +72,13 @@ class NewsViewModel(application: Application) :AndroidViewModel(application) {
     }
 
      fun addSourcesToDatabase(sourceList :List<SourceSelect>) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             NewsRepository.getRepoInstance(getApplication()).addSourceToDatabase(sourceList)
             Log.d(TAG, "addSourcesToDatabase: data Added to Room database")
         }
     }
+
+
 
 
     fun getSourcesFromLiveData() = NewsRepository
@@ -78,7 +93,6 @@ class NewsViewModel(application: Application) :AndroidViewModel(application) {
                     newsArticleList.value = response.articleList.map{
                         it.author = "By : ${it.author}" ;
                         it.source.sourceName = "Source : ${it.source.sourceName}"
-
                         it
                     }
                 }

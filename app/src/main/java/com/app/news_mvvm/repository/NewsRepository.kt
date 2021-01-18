@@ -23,7 +23,7 @@ class NewsRepository(context: Context) {
         val db = AppDatabase.getDatabaseInstance(context)
         sourceDao = db.sourceDao()
     }
-    fun fetchSourcesFromApi(countryCode :String, onSourceCallback: OnSourceCallback) {
+   /* fun fetchSourcesFromApi(countryCode :String, onSourceCallback: OnSourceCallback) {
         RetrofitUtils.buildApiService.fetchSources(countryCode)
                 .enqueue(object : Callback<Sources> {
                     override fun onResponse(call: Call<Sources>, response: Response<Sources>) {
@@ -41,9 +41,11 @@ class NewsRepository(context: Context) {
                         Log.d(TAG, "onFailure: ${t.localizedMessage}")
                     }
                 })
+    }*/
+
+    suspend fun fetchSourcesFromApi(countryCode: String) :Response<Sources> {
+        return RetrofitUtils.buildApiService.fetchSources(countryCode)
     }
-
-
     suspend fun addSourceToDatabase(sourceList :List<SourceSelect>) {
         sourceDao.insertSourceList(sourceList)
     }
