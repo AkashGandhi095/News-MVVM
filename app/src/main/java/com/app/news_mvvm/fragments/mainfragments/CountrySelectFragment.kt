@@ -25,7 +25,7 @@ import com.google.android.material.button.MaterialButton
 import java.util.prefs.Preferences
 
 
-class CountrySelectFragment : Fragment() {
+class CountrySelectFragment : Fragment(R.layout.fragment_country_select) {
 
 
     private  val TAG = "CountrySelectFragment"
@@ -36,16 +36,10 @@ class CountrySelectFragment : Fragment() {
     private val pref :AppPreference by lazy {
        AppPreference(requireContext())
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity())[NewsViewModel ::class.java]
-    }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_country_select, container, false)
     }
 
 

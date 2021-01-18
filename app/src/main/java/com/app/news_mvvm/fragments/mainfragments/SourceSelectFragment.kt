@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.log
 
 
-class SourceSelectFragment : Fragment() , SourceSelectAdapter.SourceCheckedListener {
+class SourceSelectFragment : Fragment(R.layout.fragment_source_select) , SourceSelectAdapter.SourceCheckedListener {
 
     companion object {
         private const val TAG = "SourceSelectFragmentLog"
@@ -44,13 +45,6 @@ class SourceSelectFragment : Fragment() , SourceSelectAdapter.SourceCheckedListe
         newsViewModel = ViewModelProvider(requireActivity())[NewsViewModel ::class.java]
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_source_select, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,28 +75,7 @@ class SourceSelectFragment : Fragment() , SourceSelectAdapter.SourceCheckedListe
         }
     }
 
-    private fun getSourceList() :List<SourceSelect> {
-        return arrayListOf<SourceSelect>()
-                .apply {
-                    add(SourceSelect(false , "BBC News","bbc"))
-                    add(SourceSelect(false , "The Hindu" , "hindu"))
-                    add(SourceSelect(false , "Bloomberg" , "blm"))
-                    add(SourceSelect(false , "New York Times" , "nyt"))
-                    add(SourceSelect(false , "New York Times" , "nyt"))
-                    add(SourceSelect(false , "tech cruch" , "nyt"))
-                    add(SourceSelect(false , "ABC News" , "nyt"))
-                    add(SourceSelect(false , "World News" , "nyt"))
-                    add(SourceSelect(false , "P News" , "nyt"))
-                    add(SourceSelect(false , "Jaba News" , "nyt"))
-                    add(SourceSelect(false , "R News" , "nyt"))
-                    add(SourceSelect(false , "All News" , "nyt"))
-                    add(SourceSelect(false , "USA Times" , "nyt"))
-                    add(SourceSelect(false , "Greata Times" , "nyt"))
-                    add(SourceSelect(false , "Cneda News" , "nyt"))
 
-                }
-
-    }
 
     override fun onSourceChecked(sourceSelect: SourceSelect , pos :Int) {
 
