@@ -13,8 +13,10 @@
         <action
             android:id="@+id/action_headlineFragment_to_newsDetailsFragment"
             app:destination="@id/newsDetailsFragment"
-            app:enterAnim="@anim/enter_anim"
-            app:popExitAnim="@anim/exit_anim" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/sourceFragment"
@@ -24,8 +26,10 @@
         <action
             android:id="@+id/action_sourceFragment_to_newsDetailsFragment"
             app:destination="@id/newsDetailsFragment"
-            app:enterAnim="@anim/enter_anim"
-            app:exitAnim="@anim/exit_anim" />
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/newsDetailsFragment"

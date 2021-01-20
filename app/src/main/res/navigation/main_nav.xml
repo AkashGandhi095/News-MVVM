@@ -9,18 +9,20 @@
         android:id="@+id/countrySelectFragment"
         android:name="com.app.news_mvvm.fragments.mainfragments.CountrySelectFragment"
         android:label="fragment_country_select"
-        tools:layout="@layout/fragment_country_select" >
+        tools:layout="@layout/fragment_country_select">
         <action
             android:id="@+id/action_countrySelectFragment_to_sourceSelectFragment"
-            app:destination="@id/sourceSelectFragment" />
+            app:destination="@id/sourceSelectFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/sourceSelectFragment"
         android:name="com.app.news_mvvm.fragments.mainfragments.SourceSelectFragment"
         android:label="fragment_source_select"
-        tools:layout="@layout/fragment_source_select" >
-        <action
-            android:id="@+id/action_sourceSelectFragment_to_countrySelectFragment"
-            app:destination="@id/countrySelectFragment" />
+        tools:layout="@layout/fragment_source_select">
+
     </fragment>
 </navigation>
