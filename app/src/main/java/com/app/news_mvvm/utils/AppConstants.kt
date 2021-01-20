@@ -6,6 +6,7 @@ object AppConstants {
     const val PREF_ACTIVITY_STATUS :String = "activityStatus"
     const val PREF_COUNTRY_CODE :String = "countryCode"
     const val NEWS_URL :String = "news_url"
+    const val NEWS_API_KEY = "0000-000-ABC-XYZ"
 
 
 }

@@ -23,25 +23,6 @@ class NewsRepository(context: Context) {
         val db = AppDatabase(context)
         sourceDao = db.sourceDao()
     }
-   /* fun fetchSourcesFromApi(countryCode :String, onSourceCallback: OnSourceCallback) {
-        RetrofitUtils.buildApiService.fetchSources(countryCode)
-                .enqueue(object : Callback<Sources> {
-                    override fun onResponse(call: Call<Sources>, response: Response<Sources>) {
-                        if (response.isSuccessful) {
-                            response.body()?.sources?.let {
-                                onSourceCallback.onSuccessResponse(it)
-                            }
-                        } else {
-                            onSourceCallback.onErrorResponse("Something Went Wrong")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<Sources>, t: Throwable) {
-                        onSourceCallback.onErrorResponse("Something Went Wrong :${t.localizedMessage}")
-                        Log.d(TAG, "onFailure: ${t.localizedMessage}")
-                    }
-                })
-    }*/
 
     suspend fun fetchSourcesFromApi(countryCode: String) :Response<Sources> {
         return RetrofitUtils.buildApiService.fetchSources(countryCode)
@@ -52,53 +33,12 @@ class NewsRepository(context: Context) {
 
     fun getSourceFromDatabase() = sourceDao.getAllSources()
 
-    fun fetchHeadlinesFromServer(countryCode: String, newsCallback: OnNewsCallback) {
-        RetrofitUtils.buildApiService.fetchTopHeadlines(countryCode)
-            .enqueue(object : Callback<News> {
+    suspend fun fetchHeadlinesFromServer(countryCode: String) =
+            RetrofitUtils.buildApiService.fetchTopHeadlines(countryCode)
 
-                override fun onResponse(call: Call<News>, response: Response<News>) {
-                    if (response.isSuccessful) {
+    suspend fun fetchSourceNewsFromServer(sourceCode :String) =
+            RetrofitUtils.buildApiService.fetchSourceNews(sourceCode)
 
-                        try {
-                            newsCallback.onSuccessResponse(response.body()!!)
-                        } catch (e: NullPointerException) {
-                            newsCallback.onErrorResponse("Something Went Wrong , try again later")
-                        }
-                    }
-                    else {
-                        newsCallback.onErrorResponse("Something Went Wrong , ${response.errorBody()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<News>, t: Throwable) {
-                    Log.d(TAG, "onFailure: ${t.localizedMessage}")
-                    newsCallback.onErrorResponse("Something Went Wrong , ${t.localizedMessage}")
-                }
-            })
-    }
-
-    fun fetchSourceNewsFromServer(sourceCode :String , newsCallback: OnNewsCallback) {
-        RetrofitUtils.buildApiService.fetchSourceNews(sourceCode)
-                .enqueue(object : Callback<News> {
-                    override fun onResponse(call: Call<News>, response: Response<News>) {
-                        if (response.isSuccessful) {
-                            try {
-                                newsCallback.onSuccessResponse(response.body()!!)
-                            } catch (e: java.lang.NullPointerException) {
-                                newsCallback.onErrorResponse("Something Went Wrong , try again later")
-                            }
-
-                        } else {
-                            newsCallback.onErrorResponse("Something Went Wrong , ${response.errorBody()}")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<News>, t: Throwable) {
-                        Log.d(TAG, "onFailure: ${t.localizedMessage}")
-                        newsCallback.onErrorResponse("Something Went Wrong , ${t.localizedMessage}")
-                    }
-                })
-    }
 
     companion object {
         private var INSTANCE: NewsRepository? = null

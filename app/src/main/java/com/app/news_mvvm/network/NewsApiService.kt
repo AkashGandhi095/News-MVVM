@@ -18,10 +18,10 @@ interface NewsApiService {
     suspend fun fetchSources(@Query("country") countryCode: String) :Response<Sources>
 
     @GET("top-headlines")
-    fun fetchTopHeadlines(@Query("country") countryCode: String) :Call<News>
+    suspend fun fetchTopHeadlines(@Query("country") countryCode: String) :Response<News>
 
     @GET("everything")
-    fun fetchSourceNews(@Query("sources") source :String) :Call<News>
+    suspend fun fetchSourceNews(@Query("sources") source :String) :Response<News>
 
 }
 

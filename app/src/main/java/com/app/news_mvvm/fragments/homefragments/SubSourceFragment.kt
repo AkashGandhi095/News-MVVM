@@ -15,6 +15,7 @@ import com.app.news_mvvm.R
 import com.app.news_mvvm.adapters.NewsAdapter
 import com.app.news_mvvm.model.News
 import com.app.news_mvvm.utils.AppConstants
+import com.app.news_mvvm.utils.NewsResource
 import com.app.news_mvvm.viewModel.NewsViewModel
 import com.google.android.material.textview.MaterialTextView
 
@@ -55,15 +56,31 @@ class SubSourceFragment : Fragment() , NewsAdapter.OnNewsClickListener {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
 
-        viewModel.getLiveSourceNews().observe(viewLifecycleOwner , {
-            sourceNewsRec.setBackgroundColor(resources.getColor(R.color.white , null))
-            newsAdapter.updateArticles(it)
+        viewModel.getLiveSourceNews().observe(viewLifecycleOwner, { newsResponse ->
+            when (newsResponse) {
+                is NewsResource.Success -> {
+                    newsAdapter.diffList.submitList(newsResponse.news.articleList)
+                    sourceNewsRec.setBackgroundColor(resources.getColor(R.color.white, null))
+                }
+
+                is NewsResource.Error -> {
+                    Log.d(TAG, "Error : ${newsResponse.errorMsg}")
+                }
+
+                is NewsResource.Loading -> {
+                    sourceNewsRec.setBackgroundColor(resources.getColor(R.color.bg, null))
+                }
+
+            }
+            /*sourceNewsRec.setBackgroundColor(resources.getColor(R.color.white , null))
+            //newsAdapter.updateArticles(it)
+            newsAdapter.diffList.submitList(it)*/
         })
     }
 
     private fun initViews(view: View) {
         sourceNewsRec = view.findViewById(R.id.sourceNews_recV)
-        newsAdapter = NewsAdapter( listOf() , this)
+        newsAdapter = NewsAdapter( this)
 
         sourceNewsRec.apply {
             layoutManager = LinearLayoutManager(requireContext())

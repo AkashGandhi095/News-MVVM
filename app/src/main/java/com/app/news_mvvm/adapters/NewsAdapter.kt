@@ -6,20 +6,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.news_mvvm.R
 import com.app.news_mvvm.model.Articles
+import com.app.news_mvvm.model.News
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 import com.squareup.picasso.Picasso
 
-class NewsAdapter(private var articlesList: List<Articles> , private val onNewsClickListener: OnNewsClickListener) :
+class NewsAdapter( private val onNewsClickListener: OnNewsClickListener) :
     RecyclerView.Adapter<NewsAdapter.NewsHolder>() {
 
-    fun updateArticles(articlesList: List<Articles>) {
+   /* fun updateArticles(articlesList: List<Articles>) {
         this.articlesList = articlesList
         notifyDataSetChanged()
+    }*/
+
+    private val diffUtil = object :DiffUtil.ItemCallback<Articles>() {
+        override fun areItemsTheSame(oldItem: Articles, newItem: Articles): Boolean {
+            return oldItem.newsUrl == newItem.newsUrl
+        }
+
+        override fun areContentsTheSame(oldItem: Articles, newItem: Articles): Boolean {
+            return oldItem == newItem
+        }
     }
+
+    val diffList = AsyncListDiffer(this , diffUtil)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsAdapter.NewsHolder {
         return NewsHolder(LayoutInflater.from(parent.context)
@@ -28,7 +43,8 @@ class NewsAdapter(private var articlesList: List<Articles> , private val onNewsC
 
     override fun onBindViewHolder(holder: NewsAdapter.NewsHolder, position: Int) {
 
-        holder.bindDataToView(articlesList[position])
+       // holder.bindDataToView(articlesList[position])
+        holder.bindDataToView(diffList.currentList[position])
     }
 
     override fun getItemId(position: Int): Long {
@@ -39,7 +55,7 @@ class NewsAdapter(private var articlesList: List<Articles> , private val onNewsC
         return position
     }
 
-    override fun getItemCount(): Int = articlesList.size
+    override fun getItemCount(): Int = diffList.currentList.size
 
     inner class NewsHolder(itemView :View) :RecyclerView.ViewHolder(itemView) {
         private val newsImgV :ShapeableImageView = itemView.findViewById(R.id.news_imgV)
@@ -50,8 +66,8 @@ class NewsAdapter(private var articlesList: List<Articles> , private val onNewsC
         init {
             itemView.setOnClickListener {
                 //it.findNavController().navigate(R.id.action_headlineFragment_to_newsDetailsFragment)
-                Log.d("NEWS_URL", ": ${articlesList[absoluteAdapterPosition].newsUrl}")
-                onNewsClickListener.onClick(itemView , articlesList[absoluteAdapterPosition].newsUrl)
+               // Log.d("NEWS_URL", ": ${articlesList[absoluteAdapterPosition].newsUrl}")
+                onNewsClickListener.onClick(itemView , diffList.currentList[absoluteAdapterPosition].newsUrl)
             }
         }
         fun bindDataToView(articles :Articles) {
