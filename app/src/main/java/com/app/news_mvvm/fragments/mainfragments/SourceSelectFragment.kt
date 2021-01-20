@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +19,8 @@ import com.app.news_mvvm.R
 import com.app.news_mvvm.adapters.SourceSelectAdapter
 import com.app.news_mvvm.model.SourceSelect
 import com.app.news_mvvm.utils.AppPreference
+import com.app.news_mvvm.utils.SourceResource
+import com.app.news_mvvm.utils.setVisibility
 import com.app.news_mvvm.viewModel.NewsViewModel
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +39,7 @@ class SourceSelectFragment : Fragment(R.layout.fragment_source_select) , SourceS
     private val selectedSourceList :ArrayList<SourceSelect> by lazy { arrayListOf() }
     private lateinit var openMainBtn :MaterialButton
     private lateinit var newsViewModel :NewsViewModel
+    private lateinit var progressView :ProgressBar
 
     private val pref :AppPreference by lazy {
         AppPreference(requireContext())
@@ -50,9 +54,25 @@ class SourceSelectFragment : Fragment(R.layout.fragment_source_select) , SourceS
         super.onViewCreated(view, savedInstanceState)
 
         initViews(view)
-        newsViewModel.getLiveSources(newsViewModel.countryCode).observe(viewLifecycleOwner, {
-            sourceSelectAdapter.updateSourceSelectList(it)
-        })
+        newsViewModel.getLiveSources(newsViewModel.countryCode)
+                .observe(viewLifecycleOwner, { response ->
+                    when (response) {
+                        is SourceResource.Success -> {
+                            Log.d(TAG, "onViewCreated: ${response.data.sources}")
+                            sourceSelectAdapter.diffList.submitList(response.data.sources)
+                            progressView.setVisibility(false)
+
+                        }
+
+                        is SourceResource.Error -> {
+                            Log.d(TAG, "onViewCreated: ${response.errorMsg}")
+                            progressView.setVisibility(false)
+                        }
+
+                        is SourceResource.Loading -> progressView.setVisibility(true)
+                    }
+//                    sourceSelectAdapter.updateSourceSelectList(it)
+                })
 
         openMainBtn.setOnClickListener {
 
@@ -66,12 +86,12 @@ class SourceSelectFragment : Fragment(R.layout.fragment_source_select) , SourceS
 
     private fun initViews(view: View) {
         openMainBtn = view.findViewById(R.id.open_mainBtn)
+        progressView = view.findViewById(R.id.progressV)
         sourceRecyclerView = view.findViewById(R.id.sourceSelect_recV)
-        sourceSelectAdapter = SourceSelectAdapter(listOf() , this)
+        sourceSelectAdapter = SourceSelectAdapter(this)
         sourceRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = sourceSelectAdapter
-
         }
     }
 

@@ -15,7 +15,7 @@ abstract class AppDatabase :RoomDatabase(){
         @Volatile
         private var INSTANCE :AppDatabase? = null
 
-        fun getDatabaseInstance(context: Context) :AppDatabase = INSTANCE ?: createDatabase(context).also {
+        operator fun invoke(context: Context) :AppDatabase = INSTANCE ?: createDatabase(context).also {
             INSTANCE = it
         }
 

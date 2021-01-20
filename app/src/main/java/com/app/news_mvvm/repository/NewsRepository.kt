@@ -20,7 +20,7 @@ class NewsRepository(context: Context) {
     private var sourceDao :SourceDao
     init {
         Log.d(TAG, "NewsRepo init : ${hashCode()} ")
-        val db = AppDatabase.getDatabaseInstance(context)
+        val db = AppDatabase(context)
         sourceDao = db.sourceDao()
     }
    /* fun fetchSourcesFromApi(countryCode :String, onSourceCallback: OnSourceCallback) {

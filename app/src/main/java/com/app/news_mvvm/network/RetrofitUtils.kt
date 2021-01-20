@@ -1,5 +1,6 @@
 package com.app.news_mvvm.network
 
+import com.app.news_mvvm.utils.AppConstants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -7,7 +8,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitUtils  {
     private const val BASE_URL = "https://newsapi.org/v2/"
-    private const val API_KEY = "000000000000000000000000000"
 
 
     private val logIntercept :HttpLoggingInterceptor by lazy {
@@ -21,7 +21,7 @@ object RetrofitUtils  {
         OkHttpClient.Builder().addInterceptor {
             val request = it.request()
             val url = request.url
-            val mUrl = url.newBuilder().addQueryParameter("apiKey" , API_KEY ).build()
+            val mUrl = url.newBuilder().addQueryParameter("apiKey" , AppConstants.NEWS_API_KEY ).build()
             val reqBuilder = request.newBuilder().url(mUrl)
             it.proceed(reqBuilder.build())
         }.apply { addInterceptor(logIntercept) }.build()
