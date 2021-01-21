@@ -48,7 +48,6 @@ class HomeActivity : AppCompatActivity() {
 
         tabLayout = findViewById(R.id.home_tabLayout)
 
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.headlineFragment -> {
@@ -65,6 +64,23 @@ class HomeActivity : AppCompatActivity() {
                     toolbar.visibility = View.GONE
                     bottomNav.visibility = View.VISIBLE
                 }
+
+                R.id.searchNewsFragment -> {
+                    tabLayout.visibility = View.GONE
+                    toolbar.visibility = View.GONE
+                    bottomNav.visibility = View.VISIBLE
+                }
+
+                R.id.savedNewsFragment -> {
+                    tabLayout.visibility = View.GONE
+                    toolbar.visibility = View.VISIBLE
+                    toolbar.apply {
+                        setNavIconVisibility(false)
+                        title = "Saved News"
+                    }
+                    bottomNav.visibility = View.VISIBLE
+                }
+
                 R.id.newsDetailsFragment -> {
                     tabLayout.visibility = View.GONE
                     toolbar.visibility = View.VISIBLE
