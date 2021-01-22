@@ -39,6 +39,10 @@ class NewsRepository(context: Context) {
     suspend fun fetchSourceNewsFromServer(sourceCode :String) =
             RetrofitUtils.buildApiService.fetchSourceNews(sourceCode)
 
+    suspend fun fetchSearchedNews(query :String) =
+        RetrofitUtils.buildApiService.searchNews(query , 1)
+
+
 
     companion object {
         private var INSTANCE: NewsRepository? = null

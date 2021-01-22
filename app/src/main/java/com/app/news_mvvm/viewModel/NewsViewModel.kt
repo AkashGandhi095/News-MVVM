@@ -7,6 +7,7 @@ import com.app.news_mvvm.interfaces.OnNewsCallback
 import com.app.news_mvvm.model.Articles
 import com.app.news_mvvm.model.News
 import com.app.news_mvvm.model.SourceSelect
+import com.app.news_mvvm.network.RetrofitUtils
 import com.app.news_mvvm.repository.NewsRepository
 import com.app.news_mvvm.utils.NewsResource
 import com.app.news_mvvm.utils.SourceResource
@@ -32,6 +33,8 @@ class NewsViewModel(application: Application) :AndroidViewModel(application) {
 
     //private val sourceNewsArticlesList :MutableLiveData<List<Articles>> by lazy { MutableLiveData() }
     private val sourceNewsArticles :MutableLiveData<NewsResource> by lazy {MutableLiveData()}
+
+    private val searchedNewsArticles :MutableLiveData<NewsResource> by lazy { MutableLiveData() }
 
     var countryCode :String = ""
 
@@ -124,9 +127,24 @@ class NewsViewModel(application: Application) :AndroidViewModel(application) {
 
     fun getLiveSourceNews() :LiveData<NewsResource> = sourceNewsArticles
 
-    /*val getError :LiveData<String>
-        get() = errorString
-*/
+    fun fetchSearchNews(newsQuery :String) {
+        viewModelScope.launch {
+            searchedNewsArticles.value = NewsResource.Loading
+            val searchNewsRes = NewsRepository.getRepoInstance(getApplication())
+                    .fetchSearchedNews(newsQuery)
+
+            if (searchNewsRes.isSuccessful) {
+                searchNewsRes.body()?.let { news ->
+                    searchedNewsArticles.value = NewsResource.Success(news)
+                }
+            } else {
+                searchedNewsArticles.value = NewsResource.Error(searchNewsRes.message())
+            }
+        }
+    }
+
+    val getLiveSearchedNews :LiveData<NewsResource>
+        get() = searchedNewsArticles
 
 
     override fun onCleared() {

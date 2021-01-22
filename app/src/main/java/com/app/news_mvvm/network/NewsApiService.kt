@@ -23,5 +23,13 @@ interface NewsApiService {
     @GET("everything")
     suspend fun fetchSourceNews(@Query("sources") source :String) :Response<News>
 
+    @GET("everything")
+    suspend fun searchNews(@Query("q") query :String ,
+                           @Query("page") page :Int = 1
+    ) :Response<News>
+
+
+
+
 }
 
